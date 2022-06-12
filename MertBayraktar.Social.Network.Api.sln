@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32516.85
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MertBayraktar.Social.Network.Api", "MertBayraktar.Social.Network.Api\MertBayraktar.Social.Network.Api.csproj", "{AFE905A4-6863-4C4C-A3F9-42F0DA041A7A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AFE905A4-6863-4C4C-A3F9-42F0DA041A7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFE905A4-6863-4C4C-A3F9-42F0DA041A7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFE905A4-6863-4C4C-A3F9-42F0DA041A7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFE905A4-6863-4C4C-A3F9-42F0DA041A7A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DAE9B8F0-9398-487B-B744-FFD2FD6D8B86}
+	EndGlobalSection
+EndGlobal

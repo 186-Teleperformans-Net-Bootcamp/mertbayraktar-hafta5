@@ -1,7 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using MertBayraktar.Social.Network.Api.Entities;
+using MertBayraktar.Social.Network.Api.Entities.Data;
 using Microsoft.IdentityModel.Tokens;
 
 namespace MertBayraktar.Social.Network.Api.Generators

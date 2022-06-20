@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MertBayraktar.Social.Network.Api.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20220612225442_ikinci_mig")]
-    partial class ikinci_mig
+    [Migration("20220620112933_ilk_mig")]
+    partial class ilk_mig
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -290,6 +290,9 @@ namespace MertBayraktar.Social.Network.Api.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("Birthdate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()

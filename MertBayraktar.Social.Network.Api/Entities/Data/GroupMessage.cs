@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MertBayraktar.Social.Network.Api.Entities
+namespace MertBayraktar.Social.Network.Api.Entities.Data
 {
     public class GroupMessage
     {

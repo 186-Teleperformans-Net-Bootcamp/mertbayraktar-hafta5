@@ -1,4 +1,4 @@
-﻿namespace MertBayraktar.Social.Network.Api.Entities
+﻿namespace MertBayraktar.Social.Network.Api.Entities.Data
 {
     public class GroupMembership
     {

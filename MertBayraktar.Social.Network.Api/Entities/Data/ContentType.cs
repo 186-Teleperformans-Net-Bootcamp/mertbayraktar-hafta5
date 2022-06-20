@@ -1,6 +1,6 @@
-﻿namespace MertBayraktar.Social.Network.Api.Entities
+﻿namespace MertBayraktar.Social.Network.Api.Entities.Data
 {
-    public class FriendshipStatus
+    public class ContentType
     {
         public int Id { get; set; }
         public string Name { get; set; }

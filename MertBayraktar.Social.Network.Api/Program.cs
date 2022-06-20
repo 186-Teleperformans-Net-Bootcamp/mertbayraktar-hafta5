@@ -1,7 +1,10 @@
 using System.Text;
 using MertBayraktar.Social.Network.Api;
+using MertBayraktar.Social.Network.Api.Business.Abstracts;
+using MertBayraktar.Social.Network.Api.Business.Concretes;
 using MertBayraktar.Social.Network.Api.Data;
-using MertBayraktar.Social.Network.Api.Entities;
+using MertBayraktar.Social.Network.Api.Entities.Data;
+using MertBayraktar.Social.Network.Api.Generators;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -12,42 +15,58 @@ var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 // Add services to the container.
 
-builder.Services.AddControllers();
+
 builder.Services.AddDbContext<Context>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
-builder.Services.AddIdentity<User,IdentityRole>()
+
+builder.Services.AddScoped<IUserRepo, UserRepository>();
+
+builder.Services.AddScoped<TokenGenerator>();
+
+builder.Services.AddScoped<IRabbitmqConnection, RabbitmqConnection>();
+builder.Services.AddScoped<IRabbitmqService, RabbitmqManager>();
+
+
+
+builder.Services.AddMemoryCache();
+
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = configuration.GetConnectionString("Redis");
+    options.InstanceName = "RedisCacheServer";
+});
+
+
+builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<Context>()
     .AddDefaultTokenProviders();
+
 
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}
-).AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+    .AddJwtBearer(options =>
     {
-        ValidateAudience = true,
-        ValidateIssuer = true,
-        ValidAudience = configuration["JWT:Audience"],
-        ValidIssuer = configuration["JWT:Issuer"],
-        ValidateLifetime = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Key"]))
-    };
-}
-);
-builder.Services.AddStackExchangeRedisCache(options =>
-{
-    options.InstanceName = "RedisCacheServer";
-    options.Configuration = "localhost";
-});
-builder.Services.AddMemoryCache();
+        options.SaveToken = true;
+        options.RequireHttpsMetadata = false;
+        options.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidAudience = configuration["JWT:Audience"],
+            ValidIssuer = configuration["JWT:Issuer"],
+            ValidateLifetime = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Key"]))
+        };
+    });
 
-builder.Services.AddResponseCaching();
 
+builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -61,7 +80,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseHttpsRedirection();
+
 app.UseAuthorization();
+
 app.UseAuthentication();
 
 app.MapControllers();

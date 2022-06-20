@@ -2,8 +2,10 @@
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
+using MertBayraktar.Social.Network.Api.Business.Abstracts;
 using MertBayraktar.Social.Network.Api.Data;
 using MertBayraktar.Social.Network.Api.Entities;
+using MertBayraktar.Social.Network.Api.Entities.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -23,14 +25,15 @@ namespace MertBayraktar.Social.Network.Api.Controllers
         private readonly IMemoryCache _memoryCache;
         private readonly IDistributedCache _distributedCache;
         private readonly Context _db;
-        public UserController(UserManager<User> userManager, IConfiguration configuration, IMemoryCache memoryCache, IDistributedCache distributedCache, Context db)
+        private readonly IUserRepo _userRepository;
+        public UserController(UserManager<User> userManager, IConfiguration configuration, IMemoryCache memoryCache, IDistributedCache distributedCache, Context db, IUserRepo userRepository)
         {
             _userManager = userManager;
             _configuration = configuration;
             _memoryCache = memoryCache;
             _distributedCache = distributedCache;
             _db = db;
-
+            _userRepository = userRepository;
         }
         //Cache işlemi
         [HttpGet("GetUserFriendsCache")]
@@ -48,6 +51,25 @@ namespace MertBayraktar.Social.Network.Api.Controllers
                 };
                 _memoryCache.Set("userList", users, cacheEntryOptions);
             };
+            return Ok(users);
+        }
+        [HttpGet]
+        [Route("GetUsersbyQuery")]
+        public IActionResult GetAllUsersQuery([FromQuery] UserParameters parameters)
+        {
+            var users = _userRepository.GetAllUsers(parameters);
+
+            var metadata = new
+            {
+                users.Result.TotalCount,
+                users.Result.PageSize,
+                users.Result.CurrentPage,
+                users.Result.TotalPages,
+                users.Result.HasNext,
+                users.Result.HasPrevious
+            };
+
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metadata));
             return Ok(users);
         }
     }

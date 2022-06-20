@@ -1,5 +1,6 @@
-﻿using MertBayraktar.Social.Network.Api.DTOs;
-using MertBayraktar.Social.Network.Api.Entities;
+﻿using MertBayraktar.Social.Network.Api.Business.Abstracts;
+using MertBayraktar.Social.Network.Api.DTOs;
+using MertBayraktar.Social.Network.Api.Entities.Data;
 using MertBayraktar.Social.Network.Api.Generators;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -13,10 +14,12 @@ namespace MertBayraktar.Social.Network.Api.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _configuration;
-        public AccController(IConfiguration configuration, UserManager<User> userManager)
+        private readonly IRabbitmqService _rabbitmqMagager;
+        public AccController(IConfiguration configuration, UserManager<User> userManager,IRabbitmqService rabbitmqManager)
         {
             _configuration = configuration;
             _userManager = userManager;
+            _rabbitmqMagager = rabbitmqManager;
         }
 
         [HttpPost]
@@ -38,7 +41,9 @@ namespace MertBayraktar.Social.Network.Api.Controllers
             if (!result.Succeeded)
                 return BadRequest("Kullnanıcı oluşturulken hata oluştu");
             else
-                return Ok(model);
+                
+                _rabbitmqMagager.Publish(newUser, "direct", "direct.test", "direct.queuName", "direct.test.key");
+            return Ok(model);
         }
         [HttpPost]
         [Route("Login")]

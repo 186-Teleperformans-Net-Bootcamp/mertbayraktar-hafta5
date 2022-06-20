@@ -1,4 +1,4 @@
-﻿using MertBayraktar.Social.Network.Api.Entities;
+﻿using MertBayraktar.Social.Network.Api.Entities.Data;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

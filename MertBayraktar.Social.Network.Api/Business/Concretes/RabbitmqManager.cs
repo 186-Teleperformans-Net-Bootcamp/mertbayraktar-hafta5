@@ -16,16 +16,7 @@ namespace MertBayraktar.Social.Network.Api.Business.Concretes
         {
 
             using var connection = _connection.GetRabbitMqConnection();
-            //var connectionFactory = new ConnectionFactory()
-            //{
-            //    HostName = "localhost",
-            //    VirtualHost = "/",
-            //    Port = 5672,
-            //    UserName = "guest",
-            //    Password = "guest"
-
-            //};
-            //using var connection=connectionFactory.CreateConnection();
+            
 
             using var channel = connection.CreateModel();
 

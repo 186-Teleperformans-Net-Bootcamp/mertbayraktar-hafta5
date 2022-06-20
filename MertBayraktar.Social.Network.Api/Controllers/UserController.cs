@@ -53,6 +53,8 @@ namespace MertBayraktar.Social.Network.Api.Controllers
             };
             return Ok(users);
         }
+        
+        //Page,search islemi
         [HttpGet]
         [Route("GetUsersbyQuery")]
         public IActionResult GetAllUsersQuery([FromQuery] UserParameters parameters)
